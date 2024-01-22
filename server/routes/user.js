@@ -1,9 +1,9 @@
 const express = require('express');
 const zod = require('zod')
 const { User, Books, BookRequest } = require("../models/db");
-const router = express.Router(); //Here we create router which we will exprot to index
+const router = express.Router();//Here we create router which we will exprot to index
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = require('../config');
+const {JWT_SECRET} = require('../config');
 const { authMiddleware } = require('../middleware')
 
 
@@ -59,7 +59,7 @@ router.post("/signin", async (req, res) => {
 
     const isValidUser = await User.findOne({
         username: req.body.username,
-        password: res.body.password
+        password: req.body.password
     })
 
     if(!isValidUser){
@@ -122,7 +122,7 @@ router.post("/requestbook", authMiddleware, async (req, res) => {
 router.get("/issued", authMiddleware, async (req, res) => {
     
     const user = await User.findOne({
-        username: req.headers.username
+        username: req.body.username
     })
 
     const books = await Books.find({

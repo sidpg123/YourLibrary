@@ -1,20 +1,20 @@
-
 const express = require("express");
-const rootRouter = require("./routes/index");//All the requests comming will go to root router. In root router we have seperated diff routs
+const rootRouter = require("./routes/index");
 const cors = require("cors");
 const app = express();
-const bodyParser = require('body-parser');
-app.use(cors());
 
-
-app.use("/api/v1", rootRouter);
+// Use middleware to parse the request body before routing
 app.use(express.json());
 
-// const router = express.Router(); This line creates a router. In this file we don't need to create a router. 
-//We just want to send our request to different routes, which we have defined in routs directory. Hence, we will just use those
+// Use CORS middleware
+app.use(cors());
+
+// Use the root router for requests starting with "/api/v1"
+app.use("/api/v1", rootRouter);
 
 const PORT = 3000;
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
