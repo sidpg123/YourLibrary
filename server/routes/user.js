@@ -1,20 +1,18 @@
 const express = require('express');
 const zod = require('zod')
-const { User } = require("../models/db");
+const { User, Books, BookRequest } = require("../models/db");
 const router = express.Router(); //Here we create router which we will exprot to index
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = require('../confing');
 const { authMiddleware } = require('../middleware')
 require('dotenv').config()
 
-
 const signupBody = zod.object({
     username: zod.string().email(),
     password: zod.string().min(6),
     firstName: zod.string(),
-    lastName: zod.String()
+    lastName: zod.string()
 })
-
 
 router.post("/signup", async (req, res) => {
     const { success } = signupBody.safeParse(req.body);
@@ -82,7 +80,59 @@ router.post("/signin", async (req, res) => {
     })
 })
 
+//There will be three tables. One is for user, one is for librarian and one is for Books
+//Issued books will be stored in an array in users table
 
-router.get("/issued", async (req, res) => {
+//On this route user will see available books
+router.get("/bulk", authMiddleware, async (req, res)=>{
+    const books = await Books.find({});
+    res.json({
+        Books: books
+    })
+})
+
+//On this route user will request for a book. If book is available then that book will be assigned to user.
+//But status will be not collected. Once he visit the library and get the physical book, librarian will change the satus to collected
+router.post("/requestbook", authMiddleware, async (req, res) => {
+    const bookName = req.body.bookName;
+    const book = await Books.findOne({
+        title: bookName 
+    })
+    const user = await User.findOne({
+        username: req.body.username
+    })
+
+    if(book.isAvailable){
+        const requset = await BookRequest.create({
+            userId: user._id,
+            bookId: book._id,
+            status: "pending"
+        }) 
+    }else{
+        res.json({
+            message: "Book is currantly unavailable"
+        })
+    }
+    res.json({
+        message: "Request sent successfully."
+    })
+})
+
+//On this route user can see which books he has
+router.get("/issued", authMiddleware, async (req, res) => {
+    
+    const user = await User.findOne({
+        username: req.headers.username
+    })
+
+    const books = await Books.find({
+        _id : {
+            "$in" : user.issuedBooks
+        }
+    })
+    
+    res.json({
+        books: books
+    })
 
 })
