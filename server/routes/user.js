@@ -3,9 +3,9 @@ const zod = require('zod')
 const { User, Books, BookRequest } = require("../models/db");
 const router = express.Router(); //Here we create router which we will exprot to index
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = require('../confing');
+const JWT_SECRET = require('../config');
 const { authMiddleware } = require('../middleware')
-require('dotenv').config()
+
 
 const signupBody = zod.object({
     username: zod.string().email(),
@@ -44,8 +44,8 @@ router.post("/signup", async (req, res) => {
 })
 
 const signinBody = zod.object({
-    username: zod.String().email(),
-    password: zod.String()
+    username: zod.string().email(),
+    password: zod.string()
 })
 
 router.post("/signin", async (req, res) => {
@@ -136,3 +136,6 @@ router.get("/issued", authMiddleware, async (req, res) => {
     })
 
 })
+
+
+module.exports = router;

@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
-const { Schema } = require('zod');
-
-mongoose.connect(process.env.URL);
+// const zod = require('zod');
+// process.env.MONGODB_URI ||"mongodb+srv://preparation013:FgQD8NktVNGSM3Qp@cluster0.x49xphj.mongodb.net/library_project"
+require('dotenv').config(process.env.MONGODB_URI)
+mongoose.connect();
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -44,7 +45,7 @@ const userSchema = new mongoose.Schema({
     }]
 })
 
-const bookSchema = new Schema({
+const bookSchema = new mongoose.Schema({
     title: {
       type: String,
       required: true,
@@ -70,7 +71,7 @@ bookSchema.pre('save', function (next) {
 });
 
 
-const bookRequestSchema = new Schema({
+const bookRequestSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
@@ -86,6 +87,7 @@ const bookRequestSchema = new Schema({
 
 const Books = mongoose.model("Books", bookSchema);
 const User = mongoose.model("User", userSchema);
+
 const BookRequest  = mongoose.model("BookRequest", bookRequestSchema);
 
 module.exports = {
