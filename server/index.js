@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 app.use(cors());
 
 
-app.use("/", rootRouter);
+app.use("/api/v1", rootRouter);
 app.use(express.json());
 
 // const router = express.Router(); This line creates a router. In this file we don't need to create a router. 

@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 // const zod = require('zod');
-// process.env.MONGODB_URI ||"mongodb+srv://preparation013:FgQD8NktVNGSM3Qp@cluster0.x49xphj.mongodb.net/library_project"
-require('dotenv').config(process.env.MONGODB_URI)
-mongoose.connect();
+
+require('dotenv').config()
+mongoose.connect(process.env.MONGODB_URI);
 
 const userSchema = new mongoose.Schema({
     username: {
