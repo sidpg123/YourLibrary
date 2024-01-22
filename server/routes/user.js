@@ -5,6 +5,9 @@ const router = express.Router(); //Here we create router which we will exprot to
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = require('../confing');
 const { authMiddleware } = require('../middleware')
+require('dotenv').config()
+
+
 const signupBody = zod.object({
     username: zod.string().email(),
     password: zod.string().min(6),
@@ -81,5 +84,5 @@ router.post("/signin", async (req, res) => {
 
 
 router.get("/issued", async (req, res) => {
-    
+
 })
