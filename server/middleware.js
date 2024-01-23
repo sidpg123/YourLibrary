@@ -12,9 +12,10 @@ const authMiddleware = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
-
         if(decoded){
-            req.userId = decoded.userId;
+            const userId = decoded.userId;
+            req.userId = userId;
+            console.log("inside the middleware");
             next();
         }else{
             return res.status(403).json({});    
@@ -22,7 +23,9 @@ const authMiddleware = (req, res, next) => {
 
         next();
     } catch (err) {
+        console.log("inside the middleware");
         return res.status(403).json({});
+
     }
 };
 

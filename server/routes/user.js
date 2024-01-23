@@ -29,18 +29,25 @@ router.post("/signup", async (req, res) => {
         res.status(411).json({
             message: "User exists"
         })
+    }else{
+
+        const user = await User.create({
+            username: req.body.username,
+            password: req.body.password,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName, 
+        })
+        const userId = user._id;
+        const token = `Bearer ${jwt.sign({
+            userId
+        }, JWT_SECRET)}`;
+
+
+        res.json({
+            message: "user created sussefully",
+            token: token
+        })
     }
-
-    const user = await User.create({
-        username: req.body.username,
-        password: req.body.password,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName, 
-    })
-
-    res.json({
-        message: "user created sussefully"
-    })
 })
 
 const signinBody = zod.object({
@@ -55,29 +62,31 @@ router.post("/signin", async (req, res) => {
         res.status(411).json({
             message: "Invalid inputs"
         })
-    }
-
-    const isValidUser = await User.findOne({
-        username: req.body.username,
-        password: req.body.password
-    })
-
-    if(!isValidUser){
-        res.status(411).json({
-            message: "User Not found"
+    }else{
+        const isValidUser = await User.findOne({
+            username: req.body.username,
+            password: req.body.password
         })
+
+        if(!isValidUser){
+            res.status(411).json({
+                message: "User Not found"
+            })
+        }else{
+            
+            const userId = isValidUser._id;
+            const token0 = jwt.sign({
+                userId
+            }, JWT_SECRET)
+            const token = `Bearer ${token0}`;
+            console.log(token0);
+
+            res.json({
+                message: "User successfully signed-in",
+                token : token
+            })
+        }
     }
-
-    const userId = isValidUser._id;
-
-    const token = jwt.sign({
-        userId
-    }, JWT_SECRET);
-
-    res.json({
-        message: "User successfully signed-in",
-        token : token
-    })
 })
 
 //There will be three tables. One is for user, one is for librarian and one is for Books
@@ -98,44 +107,47 @@ router.post("/requestbook", authMiddleware, async (req, res) => {
     const book = await Books.findOne({
         title: bookName 
     })
-    const user = await User.findOne({
-        username: req.body.username
-    })
 
+    const userId = req.userId; //THis is given by middleware
     if(book.isAvailable){
         const requset = await BookRequest.create({
-            userId: user._id,
+            userId: userId,
             bookId: book._id,
             status: "pending"
         }) 
+        res.json({
+            message: "Request sent successfully."
+        })
+
     }else{
         res.json({
             message: "Book is currantly unavailable"
         })
     }
-    res.json({
-        message: "Request sent successfully."
-    })
 })
 
 //On this route user can see which books he has
 router.get("/issued", authMiddleware, async (req, res) => {
-    
-    const user = await User.findOne({
-        username: req.body.username
-    })
+    try{
+        const user = await User.findOne({
+            _id: req.userId
+        })
 
-    const books = await Books.find({
-        _id : {
-            "$in" : user.issuedBooks
-        }
-    })
-    
-    res.json({
-        books: books
-    })
+        const books = await Books.find({
+            _id : {
+                "$in" : user.issuedBooks
+            }
+        })
+        
+        res.json({
+            books: books
+        })
 
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
 })
 
 
-module.exports = router;
+module.exports = router; 
