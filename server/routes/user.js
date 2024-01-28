@@ -105,7 +105,7 @@ router.get("/bulk", authMiddleware, async (req, res)=>{
 router.post("/requestbook", authMiddleware, async (req, res) => {
     const bookName = req.body.bookName;
     const book = await Books.findOne({
-        title: bookName 
+        _id: bookName 
     })
 
     const userId = req.userId; //THis is given by middleware
@@ -119,7 +119,7 @@ router.post("/requestbook", authMiddleware, async (req, res) => {
             message: "Request sent successfully."
         })
 
-    }else{
+    }else{ //here we should give an alert 
         res.json({
             message: "Book is currantly unavailable"
         })

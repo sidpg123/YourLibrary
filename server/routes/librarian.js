@@ -105,5 +105,40 @@ router.post("/addBook", authMiddleware, async (req, res) => {
 //When librarian approve a request, it updates the database of user
 // router.post("/accept")
 
+router.post("/accept",authMiddleware, async (req, res) => {
+    const requestId = req.body.requestId;
+    try {
+        // const request = await BookRequest.findById(requestId);
+        const request = await BookRequest.updateOne({_id: requestId}, { $set: { status: "accepted" } },)
+        if(request) {
+            console.log("req accepted")
+            res.status(200).json({message: 'request accepted'})
+        }else{
+            console.log("not found")
+        }
+
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+})
+
+
+router.post("/reject",authMiddleware, async (req, res) => {
+    const requestId = req.body.requestId;
+    try {
+        // const request = await BookRequest.findById(requestId);
+        const request = await BookRequest.updateOne({_id: requestId}, { $set: { status: "reject" } },)
+        if(request) {
+            console.log("req accepted")
+            res.status(200).json({message: 'request rejected'})
+        }else{
+            console.log("not found")
+        }
+
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+})
+
 
 module.exports = router; 
