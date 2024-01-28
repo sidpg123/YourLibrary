@@ -5,30 +5,27 @@ const authMiddleware = (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(403).json({message: 'Token not found'});
+        return res.status(403).json({ message: 'Token not found' });
     }
 
     const token = authHeader.split(' ')[1];
 
-    try {  
+    try {
         const decoded = jwt.verify(token, JWT_SECRET);
-        if(decoded){
+        if (decoded) {
             const userId = decoded.userId;
             req.userId = userId;
             // console.log("inside the middleware");
             next();
-        }else{
-            return res.status(403).json({});    
+        } else {
+            return res.status(403).json({ message: 'Token invalid' });
         }
-
-        next();
     } catch (err) {
-        console.log("inside the middleware");
-        return res.status(403).json({});
-
+        console.error("Error in the authMiddleware:", err);
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 
 module.exports = {
     authMiddleware
-}
+};

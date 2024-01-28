@@ -66,14 +66,14 @@ router.get("/requests", authMiddleware, async (req, res) =>{
         res.status(500).json({message: 'Internal server error'});
     }
 })
- 
+
 //In this route librarian will add new books 
 let responseSent = false; // Flag to track if response has been sent
 
 router.post("/addBook", authMiddleware, async (req, res) => {
-    // try {
+    try {
         console.log("Inside the addBook block");
-        // console.log("Request Body:", req.body);
+        console.log("Request Body:", req.body);
 
         const addedBook = await Books.create({
             title: req.body.title,
@@ -89,15 +89,15 @@ router.post("/addBook", authMiddleware, async (req, res) => {
             responseSent = true;
             res.json({ message: 'Book added successfully' });
         }
-    // } catch (error) {
-    //     console.error(error);
+    } catch (error) {
+        console.error(error);
 
-    //     // Check if response has been sent before sending it again
-    //     if (!responseSent) {
-    //         responseSent = true;
-    //         res.status(500).json({ message: 'Internal server error' });
-    //     }
-    // }
+        // Check if response has been sent before sending it again
+        if (!responseSent) {
+            responseSent = true;
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    }
 });
 
 
