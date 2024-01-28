@@ -66,28 +66,44 @@ router.get("/requests", authMiddleware, async (req, res) =>{
         res.status(500).json({message: 'Internal server error'});
     }
 })
-
+ 
 //In this route librarian will add new books 
-router.post("/addBook", authMiddleware, async (req, res)=> {
-    try {
-        console.log("inside the addBook block");
-        const addedBook =   await Books.create({
+let responseSent = false; // Flag to track if response has been sent
+
+router.post("/addBook", authMiddleware, async (req, res) => {
+    // try {
+        console.log("Inside the addBook block");
+        // console.log("Request Body:", req.body);
+
+        const addedBook = await Books.create({
             title: req.body.title,
             author: req.body.author,
-            count: req.body.count
-        })
+            count: req.body.count,
+            isAvailable: true
+        });
+
         console.log('Book added successfully:', addedBook);
-        res.json({message: 'Book added succesfully'});
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message: 'Internal server error'});
-    }
-})
+
+        // Check if response has been sent before sending it again
+        if (!responseSent) {
+            responseSent = true;
+            res.json({ message: 'Book added successfully' });
+        }
+    // } catch (error) {
+    //     console.error(error);
+
+    //     // Check if response has been sent before sending it again
+    //     if (!responseSent) {
+    //         responseSent = true;
+    //         res.status(500).json({ message: 'Internal server error' });
+    //     }
+    // }
+});
 
 
 //Librarian will only approve a request when user visits the library inperson
 //When librarian approve a request, it updates the database of user
-
+// router.post("/accept")
 
 
 module.exports = router; 

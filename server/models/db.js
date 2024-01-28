@@ -60,15 +60,20 @@ const bookSchema = new mongoose.Schema({
     },
     isAvailable: {
       type: Boolean,
-      default: true,
+    //   default: true,
     },
 });
   
 // Pre-save middleware to update isAvailable based on count
 bookSchema.pre('save', function (next) {
-    this.isAvailable = this.count > 0;
-    next();
+    try {
+        this.isAvailable = this.count > 0;
+        next();
+    } catch (error) {
+        next(error);
+    }
 });
+
 
 
 const bookRequestSchema = new mongoose.Schema({
