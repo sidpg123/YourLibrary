@@ -4,6 +4,10 @@ import Heading from '../components/Heading'
 import SubHeading from '../components/SubHeading'
 import InputBox from '../components/InputBox'
 import { useState } from 'react'
+//import { useNavigate } from "react-router-dom"
+import Button from '../components/Button'
+import axios from "axios";
+
 export default function Login() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -32,6 +36,21 @@ export default function Login() {
           <InputBox label={"Password"} onChange={e =>{
             setPassword(e.target.value)
           }} paceholder={"Set Passowrd"}/>
+
+          <div className='flex justify-center mt-5 '>
+            <Button onClick={async () => {
+              const response = axios.post('http://localhost:3000/api/v1/user/signup', {
+                firstName,
+                lastName,
+                username,
+                password
+              });
+              const token = `Bearer ${(await response).data.token}`
+              localStorage.setItem("token", token);
+               
+            }} label={"Sign Up"}></Button>
+          </div>
+
         </form>
 
       </div>

@@ -5,7 +5,9 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: { 'cats': 'url(D:\Coading\LibraryProject\client\src\assets\kitlib.png)'} 
+    },
   },
   plugins: [],
 }
