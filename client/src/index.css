@@ -1,6 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-.my-custom-bg-class{
-    background-image: url(/client/src/assets/kitlib.png);
-  }
+/* 
+*{
+  font-family: "Gilroy";
+} */
+/* 
+::selection{
+  color: blanchedalmond;
+} */
