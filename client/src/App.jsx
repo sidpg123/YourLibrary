@@ -7,10 +7,13 @@ import {
 } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import { Toaster } from 'react-hot-toast';
+
 
 function App() {
 	return (
 		<>
+			<Toaster position="top-center" reverseOrder={false}/>
 			<BrowserRouter>
 				<Routes>
 					<Route path="/signup" element={<Login />} />

@@ -1,6 +1,6 @@
 import { Form, Button, Input } from 'antd';
 import axios from 'axios';
-import toast from 'react-hot-toast';
+import {toast} from 'react-hot-toast';
 
 
 import React from 'react'
@@ -29,7 +29,7 @@ export default function Login() {
   return (
     <div>
       <div>
-        <Form layout='vertical' onFinish={onFinish} autoComplete='off'>
+        <Form className='w-80   ' layout='vertical' onFinish={onFinish} autoComplete='off'>
 
           <Form.Item name='firstName' label='First Name' rules={[
             {
