@@ -1,7 +1,7 @@
-import { Form, Button, Input } from 'antd';
+import { Form, Button, Input, ConfigProvider } from 'antd';
 import axios from 'axios';
-import {toast} from 'react-hot-toast';
-
+import { toast } from 'react-hot-toast';
+import backgroundImg from '../assets/login.png'
 
 import React from 'react'
 
@@ -28,8 +28,23 @@ export default function Login() {
 
   return (
     <div>
-      <div>
-        <Form className='w-80   ' layout='vertical' onFinish={onFinish} autoComplete='off'>
+      <div className='grid place-items-center h-screen  relative   '>
+        <img src={backgroundImg} className='absolute w-full h-full object-cover bg-cover z-0 '></img>
+        <ConfigProvider
+          theme={{
+            components: {
+              Form: {
+                /* here is your component tokens */
+                labelFontSize: 15,
+                itemMarginBottom: 20,
+                labelFontSize: 18,
+              },
+            },
+          }}
+        >
+
+
+        <Form className='w-80' layout='vertical' onFinish={onFinish} autoComplete='off'>
 
           <Form.Item name='firstName' label='First Name' rules={[
             {
@@ -66,13 +81,13 @@ export default function Login() {
             <Input.Password placeholder='Password' />
           </Form.Item>
 
-          <Form.Item wrapperCol={{ span: 24 }}>
-            <Button block type="primary" htmlType="submit">
+          <Form.Item wrapperCol={{ span: 30 }}>
+            <Button block type="primary" htmlType="submit" className="login-form-button">
               Register
             </Button>
           </Form.Item>
-
         </Form>
+        </ConfigProvider>
       </div>
     </div>
   )
