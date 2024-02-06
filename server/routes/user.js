@@ -94,9 +94,27 @@ router.post("/signin", async (req, res) => {
 
 //On this route user will see available books
 router.get("/bulk", authMiddleware, async (req, res)=>{
-    const books = await Books.find({});
+    const book = req.query.book || "";
+
+    const books = await Books.find({
+        $or: [{
+            title: {
+                "$regex": book
+            }
+        }, {
+            author: {
+                "$regex": book
+            }
+        }]
+    });
+    
     res.json({
-        Books: books
+        Books: books.map(book => ({
+            title: book.title,
+            author: book.author,
+            available: book.isAvailable
+        }))
+        // Books: books
     })
 })
 
