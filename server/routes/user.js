@@ -3,8 +3,9 @@ const zod = require('zod')
 const { User, Books, BookRequest } = require("../models/db");
 const router = express.Router();//Here we create router which we will exprot to index
 const jwt = require('jsonwebtoken');
-const {JWT_SECRET} = require('../config');
-const { authMiddleware } = require('../middleware')
+const { JWT_SECRET } = require('../config');
+const { authMiddleware } = require('../middlewares/middleware')
+const { roleAuthMiddleware } = require('../middlewares/roleAuth')
 
 
 const signupBody = zod.object({
@@ -17,29 +18,30 @@ const signupBody = zod.object({
 router.post("/signup", async (req, res) => {
     const { success } = signupBody.safeParse(req.body);
 
-    if(!success){
+    if (!success) {
         res.status(411).json({
             message: "Incorrect inputs"
         })
     }
 
-    const alreadyUser = await User.findOne({username: req.body.username});
+    const alreadyUser = await User.findOne({ username: req.body.username });
 
-    if(alreadyUser){
+    if (alreadyUser) {
         res.status(411).json({
             message: "User exists"
         })
-    }else{
+    } else {
 
         const user = await User.create({
             username: req.body.username,
             password: req.body.password,
             firstName: req.body.firstName,
-            lastName: req.body.lastName, 
+            lastName: req.body.lastName,
         })
         const userId = user._id;
+        const role = 'user';
         const token = `Bearer ${jwt.sign({
-            userId
+            userId, role
         }, JWT_SECRET)}`;
 
 
@@ -57,33 +59,47 @@ const signinBody = zod.object({
 
 router.post("/signin", async (req, res) => {
     const { success } = signinBody.safeParse(req.body);
-    
-    if(!success){
+
+    if (!success) {
         res.status(411).json({
+            success: false,
             message: "Invalid inputs"
         })
-    }else{
+    } else {
         const isValidUser = await User.findOne({
             username: req.body.username,
             password: req.body.password
         })
 
-        if(!isValidUser){
+        if (!isValidUser) {
             res.status(411).json({
-                message: "User Not found"
+                message: "User Not found or Password is incorrect."
             })
-        }else{
-            
+        } else {
+
             const userId = isValidUser._id;
+            
+            let role;
+            if (isValidUser.isLibrarian) {
+                role = 'librarian';
+            } else if (isValidUser.isAdmin) {
+                role = 'admin';
+            } else {
+                role = 'user';
+            }
+
             const token0 = jwt.sign({
-                userId
+                userId, role
             }, JWT_SECRET)
+            
             const token = `Bearer ${token0}`;
-            console.log(token0);
+            //console.log(token0);
 
             res.json({
+                success: true,
                 message: "User successfully signed-in",
-                token : token
+                librarian: isValidUser.isLibrarian,
+                token: token
             })
         }
     }
@@ -93,7 +109,7 @@ router.post("/signin", async (req, res) => {
 //Issued books will be stored in an array in users table
 
 //On this route user will see available books
-router.get("/bulk", authMiddleware, async (req, res)=>{
+router.get("/bulk", authMiddleware, roleAuthMiddleware("user"), async (req, res) => {
     const book = req.query.book || "";
 
     const books = await Books.find({
@@ -107,7 +123,7 @@ router.get("/bulk", authMiddleware, async (req, res)=>{
             }
         }]
     });
-    
+
     res.json({
         Books: books.map(book => ({
             title: book.title,
@@ -120,24 +136,24 @@ router.get("/bulk", authMiddleware, async (req, res)=>{
 
 //On this route user will request for a book. If book is available then that book will be assigned to user.
 //But status will be not collected. Once he visit the library and get the physical book, librarian will change the satus to collected
-router.post("/requestbook", authMiddleware, async (req, res) => {
+router.post("/requestbook", authMiddleware, roleAuthMiddleware("user"), async (req, res) => {
     const bookName = req.body.bookName;
     const book = await Books.findOne({
-        _id: bookName 
+        _id: bookName
     })
 
     const userId = req.userId; //THis is given by middleware
-    if(book.isAvailable){
+    if (book.isAvailable) {
         const requset = await BookRequest.create({
             userId: userId,
             bookId: book._id,
             status: "pending"
-        }) 
+        })
         res.json({
             message: "Request sent successfully."
         })
 
-    }else{ //here we should give an alert 
+    } else { //here we should give an alert 
         res.json({
             message: "Book is currantly unavailable"
         })
@@ -145,18 +161,18 @@ router.post("/requestbook", authMiddleware, async (req, res) => {
 })
 
 //On this route user can see which books he has
-router.get("/issued", authMiddleware, async (req, res) => {
-    try{
+router.get("/issued", authMiddleware, roleAuthMiddleware("user"), async (req, res) => {
+    try {
         const user = await User.findOne({
             _id: req.userId
         })
 
         const books = await Books.find({
-            _id : {
-                "$in" : user.issuedBooks
+            _id: {
+                "$in": user.issuedBooks
             }
         })
-        
+
         res.json({
             books: books
         })

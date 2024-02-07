@@ -4,7 +4,8 @@ const { User, Books, BookRequest } = require("../models/db");
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const {JWT_SECRET} = require('../config');
-const { authMiddleware } = require('../middleware')
+const { authMiddleware } = require('../middlewares/middleware')
+const { roleAuthMiddleware } = require('../middlewares/roleAuth')
 
 //Librarian can accept the books from user. Once user submit a book, librarian will remove that book from users data.
 //Librarian will add books and can change their count.
@@ -50,7 +51,7 @@ router.post("/signin", async (req, res) => {
     }
 })
 
-router.get("/requests", authMiddleware, async (req, res) =>{
+router.get("/requests", authMiddleware,roleAuthMiddleware, async (req, res) =>{
     try {
         const requests = await BookRequest.find({});
         if(requests){

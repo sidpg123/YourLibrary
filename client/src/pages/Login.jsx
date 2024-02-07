@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast';
 import backgroundImg from '../assets/login.png'
 
 import React from 'react'
+import BottomWarnign from '../components/BottomWarnign';
 
 export default function Login() {
 
@@ -27,9 +28,9 @@ export default function Login() {
   }
 
   return (
-    <div>
-      <div className='grid place-items-center h-screen  relative   '>
-        <img src={backgroundImg} className='absolute w-full h-full object-cover bg-cover z-0 '></img>
+    <div className="min-h-screen bg-cover bg-center" style={{ backgroundImage: `url(${backgroundImg})` }}>
+      <div className='flex justify-center flex-col items-center  h-screen  relative   '>
+        {/* <img src={backgroundImg} className='absolute w-full h-full object-cover bg-cover z-0 '></img> */}
         <ConfigProvider
           theme={{
             components: {
@@ -44,50 +45,53 @@ export default function Login() {
         >
 
 
-        <Form className='w-80' layout='vertical' onFinish={onFinish} autoComplete='off'>
+          <Form className='w-80' layout='vertical' onFinish={onFinish} autoComplete='off'>
 
-          <Form.Item name='firstName' label='First Name' rules={[
-            {
-              required: true,
-              message: "Please enter your name",
-            },
-            { whitespace: true },
-            { min: 3 },
-          ]}
-            hasFeedback>
-            <Input placeholder='Type your first name.' />
-          </Form.Item>
-
-          <Form.Item name='lastName' label='Last Name' hasFeedback >
-            <Input placeholder='Type your first name.' />
-          </Form.Item>
-
-          <Form.Item
-            name="username"
-            label="Email"
-            rules={[
+            <Form.Item name='firstName' label='First Name' rules={[
               {
                 required: true,
-                message: "Please enter your email",
+                message: "Please enter your name",
               },
-              { type: "email", message: "Please enter a valid email" },
+              { whitespace: true },
+              { min: 3 },
             ]}
-            hasFeedback
-          >
-            <Input placeholder="Type your email" />
-          </Form.Item>
+              hasFeedback>
+              <Input placeholder='Type your first name.' />
+            </Form.Item>
 
-          <Form.Item label="Password" name="password" required>
-            <Input.Password placeholder='Password' />
-          </Form.Item>
+            <Form.Item name='lastName' label='Last Name' hasFeedback >
+              <Input placeholder='Type your first name.' />
+            </Form.Item>
 
-          <Form.Item wrapperCol={{ span: 30 }}>
-            <Button block type="primary" htmlType="submit" className="login-form-button">
-              Register
-            </Button>
-          </Form.Item>
-        </Form>
+            <Form.Item
+              name="username"
+              label="Email"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter your email",
+                },
+                { type: "email", message: "Please enter a valid email" },
+              ]}
+              hasFeedback
+            >
+              <Input placeholder="Type your email" />
+            </Form.Item>
+
+            <Form.Item label="Password" name="password" required>
+              <Input.Password placeholder='Password' />
+            </Form.Item>
+
+            <Form.Item wrapperCol={{ span: 30 }}>
+              <Button block type="primary" htmlType="submit" className="login-form-button">
+                Register
+              </Button>
+            </Form.Item>
+          </Form>
         </ConfigProvider>
+        <div className=' z-10'>
+          <BottomWarnign label={"Already have an account?"} buttonText={"Sign In"} to={"/signin"}></BottomWarnign>
+        </div>
       </div>
     </div>
   )
