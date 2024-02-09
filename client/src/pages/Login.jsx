@@ -16,7 +16,7 @@ export default function Login() {
         const token = response.data.token;
         toast.success(response?.data.message);
         localStorage.setItem("token", token);
-        navigate("/dashboard");
+        navigate("/userdashboard");
       } else {
         toast.error(response?.data.message);
       }

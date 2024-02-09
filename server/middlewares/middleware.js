@@ -22,7 +22,7 @@ const   authMiddleware = (req, res, next) => {
         }
     } catch (err) {
         console.error("Error in the authMiddleware:", err);
-        return res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error hi there how are you?' });
     }
 };
 

@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Toaster } from 'react-hot-toast';
-//import jwt from "jsonwebtoken";
-//import { JWT_SECRET } from "./config";
+// imp  ort jwt from "jsonwebtoken";
+// import { JWT_SECRET } from "./config";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Signin from "./pages/Signin";
 import LibrDashboard from "./pages/LibrDashboard";
 import UserDashboard from "./pages/UserDashboard";
+import PrivateRoutes from "./components/PrivateRoutes";
 
 
 function App() {
@@ -40,14 +41,33 @@ function App() {
         <Routes>
           <Route path="/signup" element={<Login />} />
           <Route path="/signin" element={<Signin />} />
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/librarianDashboard" element={<LibrDashboard />} />
-          <Route path="/userdashboard" element={<UserDashboard />} />
+          <Route path="/" element={<Dashboard />} />
+          {/* Private routes for users */}
+          <Route
+            path="/userdashboard"
+            element={
+              <PrivateRoutes role="user">
+                <Route index element={<UserDashboard />} />
+              </PrivateRoutes>
+            }
+          />
+
+          {/* Private routes for librarians */}
+          <Route
+            path="/librarianDashboard"
+            element={
+              <PrivateRoutes role="librarian">
+                <Route index element={<LibrDashboard />} />
+              </PrivateRoutes>
+            }
+          />
+
+          {/* Fallback route */}
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
     </>
   );
 }
-
 export default App;
