@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Toaster } from 'react-hot-toast';
-// imp  ort jwt from "jsonwebtoken";
-// import { JWT_SECRET } from "./config";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Signin from "./pages/Signin";
@@ -12,8 +10,6 @@ import PrivateRoutes from "./components/PrivateRoutes";
 
 
 function App() {
-  // const l
-
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
