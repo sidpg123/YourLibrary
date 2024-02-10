@@ -200,8 +200,8 @@ router.get("/me", authMiddleware, async (req, res) => {
         } else if (user.isAdmin) {
             userRole = 'admin';
         } else {
+            userRole = 'user';      
         }
-        userRole = 'user';
 
         res.json({
             role: userRole,

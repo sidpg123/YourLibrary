@@ -36,7 +36,6 @@ export default function Login() {
             components: {
               Form: {
                 /* here is your component tokens */
-                labelFontSize: 15,
                 itemMarginBottom: 20,
                 labelFontSize: 18,
               },

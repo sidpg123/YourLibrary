@@ -23,7 +23,7 @@ function App() {
           <Route
             path="/userdashboard"
             element={
-              <PrivateRoutes role="user">
+              <PrivateRoutes requiredRole="user">
                 <Route element={<UserDashboard />} />
               </PrivateRoutes>
             }
@@ -33,7 +33,7 @@ function App() {
           <Route
             path="/librarianDashboard"
             element={
-              <PrivateRoutes role="librarian">
+              <PrivateRoutes requiredRole="librarian">
                 <Route  element={<LibrDashboard />} />
               </PrivateRoutes>
             }
