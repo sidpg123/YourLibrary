@@ -12,27 +12,7 @@ import PrivateRoutes from "./components/PrivateRoutes";
 
 
 function App() {
-  // const location = useLocation();
-  // const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem('token');
-
-  //   if (token) {
-  //     try {
-  //       const decoded = jwt.verify(token, JWT_SECRET);
-  //       const role = decoded.role;
-
-  //       if (role === 'user' && location.pathname === '/') {
-  //         navigate('/userdashboard', { replace: true });
-  //       } else if (role === 'librarian' && location.pathname === '/') {
-  //         navigate('/librarianDashboard', { replace: true });
-  //       }
-  //     } catch (error) {
-  //       console.error('Error decoding token:', error);
-  //     }
-  //   }
-  // }, [location.pathname, navigate]);
+  // const l
 
   return (
     <>
@@ -48,7 +28,7 @@ function App() {
             path="/userdashboard"
             element={
               <PrivateRoutes role="user">
-                <Route index element={<UserDashboard />} />
+                <Route element={<UserDashboard />} />
               </PrivateRoutes>
             }
           />
@@ -58,7 +38,7 @@ function App() {
             path="/librarianDashboard"
             element={
               <PrivateRoutes role="librarian">
-                <Route index element={<LibrDashboard />} />
+                <Route  element={<LibrDashboard />} />
               </PrivateRoutes>
             }
           />

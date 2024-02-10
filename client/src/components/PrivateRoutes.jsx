@@ -11,17 +11,18 @@ export default function PrivateRoutes({ role }) {
       try {
         const response = await axios.get("http://localhost:3000/api/v1/user/me", {
           headers: {
-            authorization: `Bearer ${token}`
+            authorization: token
           }
         });
-
-        //console.log(response);
-
-        if (response.data.role === role) {
+        console.log("inside the privateroutes")
+        console.log(response);
+        console.log(role);
+        console.log(response.data.role == role);
+        if (response.data.role == role) {
           setAuthenticated(true);
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('Error fetching user data:', error);  //Facing error
       }
     };
     console.log(token)
@@ -33,5 +34,5 @@ export default function PrivateRoutes({ role }) {
     }
   }, [token, role]);
 
-  return authenticated ? <Outlet /> : <Navigate to="/" />;
+  return authenticated ? <Outlet /> : <Navigate to="/dashboard"/>;
 }

@@ -183,37 +183,38 @@ router.get("/issued", authMiddleware, roleAuthMiddleware("user"), async (req, re
     }
 })
  
-
 router.get("/me", authMiddleware, async (req, res) => {
     try {
-
         const id = req.userId;
-        const response = await User.findById(id);
-        console.log(response);
+        const user = await User.findById(id);
         
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
         let userRole;
-        if(response.isLibrarian){
+        if (user.isLibrarian) {
             userRole = 'librarian';
-        }else if (response.isAdmin) {
+        } else if (user.isAdmin) {
             userRole = 'admin';
         } else {
-            userRole = 'user';
         }
+        userRole = 'user';
 
-        if(response) {
-            res.json({
-                role: userRole,
-                message: "This is message"
-            })
-        }
+        res.json({
+            role: userRole,
+            message: "This is a message"
+        });
 
     } catch (error) {
         console.error("Error in /me route:", error);
-        res.status(404).json({
-            message: "Can't finde user"
-        })        
+        res.status(500).json({
+            message: "Internal server error. /me endpoint"
+        });
     }
-})
+});
 
 
 module.exports = router; 
