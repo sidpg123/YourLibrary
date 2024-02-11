@@ -19,25 +19,14 @@ function App() {
           <Route path="/signin" element={<Signin />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/" element={<Dashboard />} />
-          {/* Private routes for users */}
-          <Route
-            path="/userdashboard"
-            element={
-              <PrivateRoutes requiredRole="user">
-                <Route element={<UserDashboard />} />
-              </PrivateRoutes>
-            }
-          />
 
-          {/* Private routes for librarians */}
-          <Route
-            path="/librarianDashboard"
-            element={
-              <PrivateRoutes requiredRole="librarian">
-                <Route  element={<LibrDashboard />} />
-              </PrivateRoutes>
-            }
-          />
+          <Route element={<PrivateRoutes requiredRole="user" />}>
+            <Route element={<UserDashboard />} path="/userdashboard" />
+          </Route>
+
+          <Route element={<PrivateRoutes requiredRole={"librarian"} />}>
+            <Route element={<LibrDashboard />} path="/librarianDashboard" />
+          </Route>
 
           {/* Fallback route */}
           <Route path="*" element={<Navigate to="/" />} />
@@ -47,3 +36,12 @@ function App() {
   );
 }
 export default App;
+
+{/* <Route
+  path="/librarianDashboard"
+  element={
+    <PrivateRoutes requiredRole="librarian">             ///This was the mistake I was doing
+      <Route element={<LibrDashboard />} />             ///This is unappropriate way to use privateroutes
+    </PrivateRoutes>
+  }
+/>  */}

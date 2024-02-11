@@ -14,7 +14,7 @@ export default function PrivateRoutes({ requiredRole }) {
           console.log("Token is "+token);
           const response = await axios.get("http://localhost:3000/api/v1/user/me", {
             headers: {
-              authorization: token
+              Authorization: token
             }
           });
 
