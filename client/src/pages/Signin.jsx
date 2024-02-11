@@ -35,7 +35,7 @@ export default function Signin() {
 
 return (
   <div className="h-screen bg-cover bg-center flex items-center justify-center" style={{ backgroundImage: `url(${backgroundImg})` }}>
-    <div className='z-10 text-white   '>
+    <div className='z-10 text-white  pt-4 overflow-auto    '>
 
       <div className='italic text-center text-4xl my-3  '>
         Welcome back...
@@ -53,7 +53,7 @@ return (
         }}
       >
 
-        <Form className='w-80' layout='vertical' autoComplete='off' onFinish={onFinish}>
+        <Form className='w-60 sm:w-80 overflow-auto' layout='vertical' autoComplete='off' onFinish={onFinish}>
           <Form.Item label="Email" name='username' className='' rules={[
             {
               required: true,

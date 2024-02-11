@@ -44,7 +44,7 @@ export default function Login() {
         >
 
 
-          <Form className='w-80' layout='vertical' onFinish={onFinish} autoComplete='off'>
+          <Form className='w-60 sm:w-80 pt-4 overflow-auto' layout='vertical' onFinish={onFinish} autoComplete='off'>
 
             <Form.Item name='firstName' label='First Name' rules={[
               {
