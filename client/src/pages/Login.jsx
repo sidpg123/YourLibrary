@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import backgroundImg from '../assets/login.png'
 import { useNavigate } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
 import React from 'react'
 import BottomWarnign from '../components/BottomWarnign';
 import Navbar from '../components/Navbar';
@@ -31,8 +31,8 @@ export default function Login() {
 
   return (
     <>
-      <div className="min-h-screen bg-cover bg-center" style={{ backgroundImage: `url(${backgroundImg})` }}>
-        <Navbar link1={"/signin"} stat1={"Sign IN"} />
+      <Navbar link1="/signin" stat1="Sign In"></Navbar>
+      <div className="h-screen bg-cover bg-center flex items-center justify-center " style={{ backgroundImage: `url(${backgroundImg})` }}>
         <div className='flex justify-center flex-col items-center  h-screen  relative   '>
           {/* <img src={backgroundImg} className='absolute w-full h-full object-cover bg-cover z-0 '></img> */}
           <ConfigProvider
@@ -46,8 +46,6 @@ export default function Login() {
               },
             }}
           >
-
-
             <Form className='w-60 sm:w-80 pt-4 overflow-auto' layout='vertical' onFinish={onFinish} autoComplete='off'>
 
               <Form.Item name='firstName' label='First Name' rules={[

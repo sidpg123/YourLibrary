@@ -12,10 +12,10 @@ export default function Navbar({ link1, stat1, link2, stat2, link3, stat3 }) {
   console.log('Rendering Navbar with:', link1, stat1);
 
   return (
-    <div className=' flex justify-between'>
+    <div className=' flex justify-between z-10  '>
 
       <NavLink to="/dashboard">
-        <img src={logo} className='h-10 absolute z-2 items-start top-3 left-5' alt="Logo" />
+        <img src={logo} className='h-10 absolute items-start top-3 left-5' alt="Logo" />
       </NavLink>
 
       <div className='absolute top-5 right-7 font-semibold text-lg space-x-5 text-slate-200'>

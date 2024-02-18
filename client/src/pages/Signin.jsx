@@ -38,8 +38,7 @@ export default function Signin() {
     <>
       <Navbar link1={"/signup"} stat1={"Sign Up"} />
       <div className="h-screen bg-cover bg-center flex items-center justify-center" style={{ backgroundImage: `url(${backgroundImg})` }}>
-        <div className='z-10 text-white  pt-4 overflow-auto    '>
-
+        <div className=' text-white  pt-4 overflow-auto    '>
           <div className='italic text-center text-4xl my-3  '>
             Welcome back...
           </div>
@@ -78,15 +77,15 @@ export default function Signin() {
                 <Input placeholder='Password' type='password'></Input>
               </Form.Item>
 
-              <Form.Item wrapperCol={{ span: 30 }}>
-                <Button block type="primary" htmlType="submit" className="login-form-button border-solid ">
+              <Form.Item>
+                <Button block type="primary" htmlType="submit" >
                   Sign In
                 </Button>
               </Form.Item>
+              <BottomWarnign label={"Don't have an account?"} buttonText={"Sign Up"} to={"/signup"}></BottomWarnign>
             </Form>
           </ConfigProvider>
           <div className=' z-10'>
-            <BottomWarnign label={"Don't have an account?"} buttonText={"Sign Up"} to={"/signup"}></BottomWarnign>
           </div>
         </div>
       </div>

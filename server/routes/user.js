@@ -110,7 +110,7 @@ router.post("/signin", async (req, res) => {
 
 //On this route user will see available books
 router.get("/bulk", authMiddleware, roleAuthMiddleware("user"), async (req, res) => {
-    const book = req.query.book || "";
+    const book = req.query.filter || "";
 
     const books = await Books.find({
         $or: [{
@@ -125,7 +125,8 @@ router.get("/bulk", authMiddleware, roleAuthMiddleware("user"), async (req, res)
     });
 
     res.json({
-        Books: books.map(book => ({
+        Books: books.map((book, index) => ({
+            id: index + 1,  
             title: book.title,
             author: book.author,
             available: book.isAvailable
@@ -159,6 +160,7 @@ router.post("/requestbook", authMiddleware, roleAuthMiddleware("user"), async (r
         })
     }
 })
+
 
 //On this route user can see which books he has
 router.get("/issued", authMiddleware, roleAuthMiddleware("user"), async (req, res) => {
