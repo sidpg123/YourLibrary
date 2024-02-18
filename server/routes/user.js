@@ -127,6 +127,7 @@ router.get("/bulk", authMiddleware, roleAuthMiddleware("user"), async (req, res)
     res.json({
         Books: books.map((book, index) => ({
             id: index + 1,  
+            _id: book._id,
             title: book.title,
             author: book.author,
             available: book.isAvailable
@@ -138,9 +139,9 @@ router.get("/bulk", authMiddleware, roleAuthMiddleware("user"), async (req, res)
 //On this route user will request for a book. If book is available then that book will be assigned to user.
 //But status will be not collected. Once he visit the library and get the physical book, librarian will change the satus to collected
 router.post("/requestbook", authMiddleware, roleAuthMiddleware("user"), async (req, res) => {
-    const bookName = req.body.bookName;
+    const id = req.body.id;
     const book = await Books.findOne({
-        _id: bookName
+        _id: id
     })
 
     const userId = req.userId; //THis is given by middleware
